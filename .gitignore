@@ -219,3 +219,5 @@ __marimo__/
 
 # Node / frontend dependencies
 node_modules/
+
+*.idea/
