@@ -22,4 +22,5 @@ Pour démarrer le serveur par la suite:
 Prérequis: npm
 
 Dans le dossier frontend:
+- `npm install`
 - `npm run dev`
