@@ -1,3 +1,7 @@
+# Project-specific files
+/train/YOLO*
+/train/antoine-germon/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

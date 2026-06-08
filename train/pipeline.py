@@ -15,7 +15,6 @@ Usage :
 """
 
 import argparse
-import os
 from pathlib import Path
 
 import config
@@ -33,7 +32,7 @@ def parse_args() -> argparse.Namespace:
         "--dataset-id",
         type=str,
         default=None,
-        help="Identifiant du dataset Ultralytics HUB (override la config)",
+        help="URI du dataset Ultralytics HUB, par ex. ul://user/datasets/slug (override la config)",
     )
     parser.add_argument(
         "--dataset-dir",
@@ -72,19 +71,20 @@ def main() -> None:
     print("\n------------------------------Pipeline d'entraînement — démarrage------------------------------\n")
 
     # Étape 1 — Extraction
+    extracted_dir = Path(args.dataset_dir)
     if not args.skip_extract:
         print("\n[1/5] Extraction du dataset...")
-        extract(dataset_dir=args.dataset_dir)
+        extracted_dir = extract(dataset_dir=args.dataset_dir)
     else:
         print("\n[1/5] Extraction ignorée (--skip-extract).")
 
     # Étape 2 — Validation
     print("\n[2/5] Validation du dataset...")
-    validate(dataset_dir=args.dataset_dir)
+    validate(dataset_dir=str(extracted_dir))
 
     # Étape 3 — Préparation
     print("\n[3/5] Préparation du dataset...")
-    yaml_path = prepare(dataset_dir=args.dataset_dir)
+    yaml_path = prepare(dataset_dir=str(extracted_dir))
 
     # Étape 4 — Training
     if not args.skip_train:
