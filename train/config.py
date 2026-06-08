@@ -6,7 +6,7 @@ ou un fichier .env à la racine du dossier training/.
 
 Exemple de fichier .env :
     ULTRALYTICS_API_KEY=votre_cle_ici
-    DATASET_ID=votre_dataset_id_ici
+    DATASET_ID=ul://votre_utilisateur/datasets/votre_dataset
 """
 
 from decouple import config
@@ -22,7 +22,7 @@ ULTRALYTICS_API_KEY: str = config("ULTRALYTICS_API_KEY", default="ul_48ae8ce22c4
 # Dataset
 # ---------------------------------------------------------------------------
 
-DATASET_ID: str = config("DATASET_ID", default="REMPLACER_PAR_VOTRE_DATASET_ID")
+DATASET_ID: str = config("DATASET_ID", default="ul://antoine-germon/datasets/hands-digits")
 
 DATASET_DIR: str = config("DATASET_DIR", default="datasets/hands-digits")
 
