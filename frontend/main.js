@@ -143,23 +143,14 @@ async function sendFrame() {
 }
 
 function draw(detections) {
-    ctx.clearRect(
-        0,
-        0,
-        overlay.width,
-        overlay.height
-    );
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
 
-    const scaleX =
-        overlay.width /
-        captureCanvas.width;
+    const scaleX = overlay.width / captureCanvas.width;
+    const scaleY = overlay.height / captureCanvas.height;
 
-    const scaleY =
-        overlay.height /
-        captureCanvas.height;
+    let totalFingers = 0;
 
     for (const det of detections) {
-
         const x = det.x * scaleX;
         const y = det.y * scaleY;
         const w = det.w * scaleX;
@@ -167,18 +158,19 @@ function draw(detections) {
 
         ctx.strokeStyle = "lime";
         ctx.lineWidth = 3;
-
         ctx.strokeRect(x, y, w, h);
 
         ctx.fillStyle = "lime";
         ctx.font = "18px Arial";
+        ctx.fillText(`${det.label} (${det.confidence})`, x, y - 10);
 
-        ctx.fillText(
-            `${det.label} (${det.confidence})`,
-            x,
-            y - 10
-        );
+        const match = det.label[0];
+        if (match) {
+            totalFingers += parseInt(match, 10);
+        }
     }
+
+    document.getElementById("finger-count").textContent = totalFingers;
 }
 
 init();

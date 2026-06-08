@@ -1,0 +1,43 @@
+body{
+    margin:0;
+}
+
+.top-level-container{
+    position:relative;
+    width:fit-content;
+}
+
+video,
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+canvas{
+    pointer-events:none;
+}
+
+.fps-counter {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    color: lime;
+    padding: 8px;
+    font-family: monospace;
+    font-size: 18px;
+    z-index: 9999;
+}
+
+.finger-count-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    color: lime;
+    padding: 12px 20px;
+    font-family: monospace;
+    font-size: 24px;
+    z-index: 9999;
+}
