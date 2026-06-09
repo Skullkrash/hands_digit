@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 
 from ultralytics import YOLO
 
@@ -29,27 +30,21 @@ async def predict(file: UploadFile = File(...)):
 
     results = model(frame, verbose=False)
 
+    plotted_frame = results[0].plot()
+
     detections = []
-    print(results)
-
     for box in results[0].boxes:
-
-        x1, y1, x2, y2 = box.xyxy[0].tolist()
-
         cls = int(box.cls[0])
-        conf = float(box.conf[0])
-
         detections.append({
-            "x": round(x1),
-            "y": round(y1),
-            "w": round(x2 - x1),
-            "h": round(y2 - y1),
-            "class_id": cls,
             "label": results[0].names[cls],
-            "confidence": round(conf, 3)
         })
-        print(detections)
 
-    return {
-        "detections": detections
-    }
+    _, encoded = cv2.imencode(".jpg", plotted_frame)
+    jpg_bytes = encoded.tobytes()
+
+    labels = [det["label"] for det in detections]
+
+    response = Response(content=jpg_bytes, media_type="image/jpeg")
+    response.headers["X-Detections"] = ",".join(labels)
+
+    return response

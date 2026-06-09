@@ -137,37 +137,23 @@ async function sendFrame() {
         body: formData
     });
 
-    const data = await response.json();
+    const labelsHeader = response.headers.get("X-Detections") || "";
+    const labels = labelsHeader ? labelsHeader.split(",") : [];
 
-    draw(data.detections);
+    const imgBlob = await response.blob();
+    await draw(imgBlob, labels);
 }
 
-function draw(detections) {
-    ctx.clearRect(0, 0, overlay.width, overlay.height);
+async function draw(imgBlob, labels) {
+    const bitmap = await createImageBitmap(imgBlob);
 
-    const scaleX = overlay.width / captureCanvas.width;
-    const scaleY = overlay.height / captureCanvas.height;
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
+    ctx.drawImage(bitmap, 0, 0, overlay.width, overlay.height);
 
     let totalFingers = 0;
-
-    for (const det of detections) {
-        const x = det.x * scaleX;
-        const y = det.y * scaleY;
-        const w = det.w * scaleX;
-        const h = det.h * scaleY;
-
-        ctx.strokeStyle = "lime";
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x, y, w, h);
-
-        ctx.fillStyle = "lime";
-        ctx.font = "18px Arial";
-        ctx.fillText(`${det.label} (${det.confidence})`, x, y - 10);
-
-        const match = det.label[0];
-        if (match) {
-            totalFingers += parseInt(match, 10);
-        }
+    for (const label of labels) {
+        const n = parseInt(label[0], 10);
+        if (!isNaN(n)) totalFingers += n;
     }
 
     document.getElementById("finger-count").textContent = totalFingers;
