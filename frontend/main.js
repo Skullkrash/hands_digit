@@ -156,13 +156,31 @@ function draw(detections) {
         const w = det.w * scaleX;
         const h = det.h * scaleY;
 
-        ctx.strokeStyle = "lime";
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = "rgba(99, 102, 241, 0.1)";
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 6);
+        ctx.fill();
 
-        ctx.fillStyle = "lime";
-        ctx.font = "18px Arial";
-        ctx.fillText(`${det.label} (${det.confidence})`, x, y - 10);
+        ctx.strokeStyle = "#818cf8";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 6);
+        ctx.stroke();
+
+        const label = `${det.label}  ${Math.round(det.confidence * 100)}%`;
+        ctx.font = "500 12px Inter, system-ui, sans-serif";
+        const tw = ctx.measureText(label).width;
+        const px = 8, py = 4, lh = 18;
+        const lx = x;
+        const ly = y > lh + py + 6 ? y - lh - py : y + h + py;
+
+        ctx.fillStyle = "#6366f1";
+        ctx.beginPath();
+        ctx.roundRect(lx, ly, tw + px * 2, lh + py, 4);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(label, lx + px, ly + lh - 2);
 
         const match = det.label[0];
         if (match) {

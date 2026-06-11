@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="./style.css">
-    </head>
-
-    <body>
-        <div class="top-level-container">
-            <div class="finger-count-container">
-                Doigts : <span id="finger-count">0</span>
-            </div>
-            <video id="video" autoplay playsinline></video>
-            <canvas id="overlay"></canvas>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Digit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="viewport">
+        <video id="video" autoplay playsinline></video>
+        <canvas id="overlay"></canvas>
+        <div class="hud-fps" id="fps">— FPS</div>
+        <div class="hud-fingers">
+            <span class="hud-fingers-label">fingers</span>
+            <span class="hud-fingers-value" id="finger-count">0</span>
         </div>
-        <div class="fps-counter">FPS counter</div>
-
-        <script type="module" src="./main.js"></script>
-    </body>
+    </div>
+    <script type="module" src="./main.js"></script>
+</body>
 </html>
