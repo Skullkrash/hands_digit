@@ -11,6 +11,9 @@ RUN apt-get update && \
 
 WORKDIR /app
 
+COPY requirements-torch.txt .
+RUN pip3 install -r requirements-torch.txt
+
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 

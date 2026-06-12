@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,8 +12,10 @@ import numpy as np
 
 app = FastAPI()
 
+url = os.getenv("ULTRALYTICS_MODEL_URL")
+
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-model = YOLO("ul://antoine-germon/train/exp-8").to(DEVICE)
+model = YOLO(url).to(DEVICE)
 
 app.add_middleware(
     CORSMiddleware,
