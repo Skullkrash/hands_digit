@@ -12,7 +12,7 @@ import numpy as np
 
 app = FastAPI()
 
-url = os.getenv("ULTRALYTICS_MODEL_URL")
+url = os.getenv("ULTRALYTICS_MODEL_URI")
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 model = YOLO(url).to(DEVICE)
