@@ -4,23 +4,21 @@ Ce projet a été réalisé dans le cadre d'un module d'IA en école d'ingérieu
 
 ## Setup
 
-### API
+### Projet web
 
-Les instructions suivantes sont à réaliser de préférence dans un environnement virtuel.
+Pour lancer le projet en faisant tourner le modèle sur CPU :
 
-Les dépendances sont inscrites dans le fichier requirements.txt. Pour les installer:
-- `pip install -r requirements.txt`
+- `docker compose up --build`
 
-Pour démarrer le serveur la première fois:
-- uvicorn app:app --reload --host 0.0.0.0 --port 8000
+Pour lancer le projet en faisant tourner le modèle sur GPU :
 
-Pour démarrer le serveur par la suite:
-- uvicorn app:app --reload
+- `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build`
 
-### Frontend
 
-Prérequis: npm
+Le frontend est servi sous localhost:3000, et le backend sous localhost:8000.
 
-Dans le dossier frontend:
-- `npm install`
-- `npm run dev`
+
+### Pipeline de training MLOps
+
+
+
