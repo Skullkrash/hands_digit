@@ -1,14 +1,21 @@
+import os
+from dotenv import load_dotenv
+
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 
 from ultralytics import YOLO
+import torch
 
 import cv2
 import numpy as np
 
 app = FastAPI()
 
-model = YOLO("model/best.pt")
+url = os.getenv("ULTRALYTICS_MODEL_URI")
+
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+model = YOLO(url).to(DEVICE)
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,7 +34,7 @@ async def predict(file: UploadFile = File(...)):
     np_img = np.frombuffer(data, np.uint8)
     frame = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
 
-    results = model(frame, verbose=False)
+    results = model(frame, verbose=False, imgsz=640, device=DEVICE, max_det=2)
 
     detections = []
     print(results)

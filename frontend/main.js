@@ -143,42 +143,52 @@ async function sendFrame() {
 }
 
 function draw(detections) {
-    ctx.clearRect(
-        0,
-        0,
-        overlay.width,
-        overlay.height
-    );
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
 
-    const scaleX =
-        overlay.width /
-        captureCanvas.width;
+    const scaleX = overlay.width / captureCanvas.width;
+    const scaleY = overlay.height / captureCanvas.height;
 
-    const scaleY =
-        overlay.height /
-        captureCanvas.height;
+    let totalFingers = 0;
 
     for (const det of detections) {
-
         const x = det.x * scaleX;
         const y = det.y * scaleY;
         const w = det.w * scaleX;
         const h = det.h * scaleY;
 
-        ctx.strokeStyle = "lime";
-        ctx.lineWidth = 3;
+        ctx.fillStyle = "rgba(99, 102, 241, 0.1)";
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 6);
+        ctx.fill();
 
-        ctx.strokeRect(x, y, w, h);
+        ctx.strokeStyle = "#818cf8";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 6);
+        ctx.stroke();
 
-        ctx.fillStyle = "lime";
-        ctx.font = "18px Arial";
+        const label = `${det.label}  ${Math.round(det.confidence * 100)}%`;
+        ctx.font = "500 12px Inter, system-ui, sans-serif";
+        const tw = ctx.measureText(label).width;
+        const px = 8, py = 4, lh = 18;
+        const lx = x;
+        const ly = y > lh + py + 6 ? y - lh - py : y + h + py;
 
-        ctx.fillText(
-            `${det.label} (${det.confidence})`,
-            x,
-            y - 10
-        );
+        ctx.fillStyle = "#6366f1";
+        ctx.beginPath();
+        ctx.roundRect(lx, ly, tw + px * 2, lh + py, 4);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(label, lx + px, ly + lh - 2);
+
+        const match = det.label[0];
+        if (match) {
+            totalFingers += parseInt(match, 10);
+        }
     }
+
+    document.getElementById("finger-count").textContent = totalFingers;
 }
 
 init();
