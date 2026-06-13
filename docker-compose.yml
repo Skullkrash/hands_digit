@@ -1,0 +1,17 @@
+# docker-compose.yml  (base, marche partout)
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - ULTRALYTICS_API_KEY=${ULTRALYTICS_API_KEY}
+      - PRODUCTION_MODEL_URI=${ULTRALYTICS_MODEL_URI}
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

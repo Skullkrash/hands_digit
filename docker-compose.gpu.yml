@@ -1,0 +1,10 @@
+# docker-compose.gpu.yml  (override, uniquement sur machine GPU)
+services:
+  backend:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
