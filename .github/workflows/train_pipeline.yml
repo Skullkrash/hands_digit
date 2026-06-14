@@ -26,7 +26,7 @@ jobs:
 
     defaults:
       run:
-        shell: bash
+        shell: powershell
 
     env:
       PYTHONUNBUFFERED: "1"  
@@ -38,33 +38,24 @@ jobs:
       - name: checkout-repository
         uses: actions/checkout@v4
       
+      # Update at your convenience if your runner does not run on Windows with :
+        # echo "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" > .env
       - name: env-file-setup
-        run: echo "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" > .env
-      
-      - name: validate-env-file
         run: |
-          test -f .env || (echo "Missing .env file in repository root" && exit 1)
-          set -a
-          source .env
-          set +a
-          test -n "${ULTRALYTICS_API_KEY:-}" || (echo "Missing ULTRALYTICS_API_KEY in .env" && exit 1)
-
+        "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" | Out-File -FilePath .env -Encoding utf8
+      
       # ==================== GESTION AUTOMATIQUE DU VENV ====================
       - name: training-venv-setup
         working-directory: train
         run: |
-          if [ ! -d ".venv_train" ]; then
-            echo "Aucun environnement virtuel trouvé. Création de venv_train..."
-            python3 -m venv .venv_train
-          fi
-          
-          ./.venv_train/bin/python -m pip install --upgrade pip
-          ./.venv_train/bin/python -m pip install -r requirements.txt
+          python3 -m venv .venv_train
+          ./.venv_train/Scripts/python.exe -m pip install --upgrade pip
+          ./.venv_train/Scripts/python.exe -m pip install -r requirements.txt
 
       # ==================== ML Pipeline avec VENV local ====================
       - name: pipeline-run
         working-directory: train
-        run: ./.venv_train/bin/python pipeline.py
+        run: ./.venv_train/Scripts/python.exe pipeline.py
 
       - name: upload-artifacts
         if: always()
