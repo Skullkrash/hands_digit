@@ -1,8 +1,7 @@
 import os
 import yaml
 from dotenv import load_dotenv
-from ultralytics import YOLO
-from ultralytics.hub import HUB
+from ultralytics import YOLO, hub
 
 def run_training():
     load_dotenv()
@@ -16,13 +15,12 @@ def run_training():
         config = yaml.safe_load(f)
     model_type = config.pop("model", "yolo26n.pt")
     
-    HUB.login(api_key)
+    hub.login(api_key)
     model = YOLO(model_type)
     
-    # 3. Lancer l'entraînement avec le reste de la config
     model.train(
         data="https://platform.ultralytics.com/antoine-germon/datasets/hands-digits",
-        **config  # Dépaquète automatiquement la config (hyperparamètres, data augmentation, etc.)
+        **config
     )
 
 if __name__ == "__main__":
