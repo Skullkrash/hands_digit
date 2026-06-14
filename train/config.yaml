@@ -1,0 +1,26 @@
+# Hyperparamètres
+model: "yolo26n.pt"
+epochs: 100
+patience: 10
+batch: 30
+device: 0
+workers: 6
+optimizer: "AdamW"
+imgsz: 640
+lr0: 0.001
+device: 0
+cache: "ram"
+
+
+# Data augmentation
+degrees: 45.0
+translate: 0.0
+perspective: 0.3
+shear: 2.0
+fliplr: 0.5
+flipud: 0.0
+mosaic: 0.0
+mixup: 0.0
+
+project: "runs/train"
+name: "pipeline-test"
