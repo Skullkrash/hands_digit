@@ -226,3 +226,5 @@ model/
 runs/
 ml/trained_model.txt
 *.pt
+
+train/.venv_train/

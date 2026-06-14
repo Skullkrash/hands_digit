@@ -1,11 +1,68 @@
-# Data extraction
+# ==================== Nom de la CI ====================
+name: Hands-digits training pipeline
 
-# Data validation
+# ==================== Déclencheurs ====================
+on:
+  push:
+    branches:
+      - main
+    paths: 
+      - 'train/**'
+      - '.github/workflows/train_pipeline.yml'
+  workflow_dispatch:
 
-# Data preparation
+# ==================== Bloquage automatique ====================
+concurrency:
+  group: train-pipeline-${{ github.ref }}
+  cancel-in-progress: true
 
-# Model training
+# ==================== Jobs ====================
+jobs:
+  train-pipeline:
+    runs-on: [self-hosted, gpu, cuda]
 
-# Model evaluation
+    permissions:
+      contents: read
 
-# Model deployment
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      PYTHONUNBUFFERED: "1"  
+    
+    # ==================== Steps ====================
+    steps:
+
+      # Cloning repository on virtual machine
+      - name: checkout-repository
+        uses: actions/checkout@v4
+      
+      - name: env-file-setup
+        run: |
+          cat > .env <<'EOF'
+          ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}
+          EOF
+      
+      - name: validate-env-file
+        run: |
+          test -f .env || (echo "Missing .env file in repository root" && exit 1)
+          set -a
+          source .env
+          set +a
+          test -n "${ULTRALYTICS_API_KEY:-}" || (echo "Missing ULTRALYTICS_API_KEY in .env" && exit 1)
+
+      # ==================== ML Pipeline avec VENV local ====================
+      - name: Run Orchestrated MLOps Pipeline
+        working-directory: train
+        run: ./.venv_train/bin/python pipeline.py
+
+      - name: upload-artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: train-pipeline-artifacts
+          if-no-files-found: warn
+          path: |
+            runs/**
+            train/reports/**
