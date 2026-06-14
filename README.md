@@ -10,7 +10,7 @@ Pour lancer le projet en faisant tourner le modèle sur CPU :
 
 - `docker compose up --build`
 
-Pour lancer le projet en faisant tourner le modèle sur GPU :
+Pour lancer le projet en faisant tourner le modèle sur GPU (avec CUDA installé) :
 
 - `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build`
 

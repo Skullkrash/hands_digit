@@ -2,7 +2,7 @@
 model: "yolo26n.pt"
 epochs: 100
 patience: 10
-batch: 30
+batch: -1
 device: 0
 workers: 6
 optimizer: "AdamW"
