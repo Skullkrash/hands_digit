@@ -42,7 +42,7 @@ jobs:
         # echo "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" > .env
       - name: env-file-setup
         run: |
-        "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" | Out-File -FilePath .env -Encoding utf8
+          "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" > .env
       
       # ==================== GESTION AUTOMATIQUE DU VENV ====================
       - name: training-venv-setup
