@@ -1,7 +1,8 @@
 import os
 import yaml
 from dotenv import load_dotenv
-from ultralytics import HUB, YOLO
+from ultralytics import YOLO
+from ultralytics.hub import HUB
 
 def run_training():
     load_dotenv()
