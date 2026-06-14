@@ -52,8 +52,20 @@ jobs:
           set +a
           test -n "${ULTRALYTICS_API_KEY:-}" || (echo "Missing ULTRALYTICS_API_KEY in .env" && exit 1)
 
+      # ==================== GESTION AUTOMATIQUE DU VENV ====================
+      - name: training-venv-setup
+        working-directory: train
+        run: |
+          if [ ! -d ".venv_train" ]; then
+            echo "Aucun environnement virtuel trouvé. Création de venv_train..."
+            python3 -m venv .venv_train
+          fi
+          
+          ./.venv_train/bin/python -m pip install --upgrade pip
+          ./.venv_train/bin/python -m pip install -r requirements.txt
+
       # ==================== ML Pipeline avec VENV local ====================
-      - name: Run Orchestrated MLOps Pipeline
+      - name: pipeline-run
         working-directory: train
         run: ./.venv_train/bin/python pipeline.py
 
