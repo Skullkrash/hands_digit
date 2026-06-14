@@ -1,5 +1,6 @@
 import os
 import yaml
+from pathlib import Path
 from dotenv import load_dotenv
 from ultralytics import YOLO, hub
 
@@ -10,16 +11,22 @@ def run_training():
     if not api_key:
         raise ValueError("Erreur : La variable ULTRALYTICS_API_KEY est introuvable dans l'environnement.")
 
-    # Charger les paramètres d'entraînement depuis config.yaml
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     model_type = config.pop("model", "yolo26n.pt")
-    
+
     hub.login(api_key)
+
+    # Télécharge le dataset HUB et récupère le chemin du yaml
+    dataset_path = hub.download_dataset(
+        "https://platform.ultralytics.com/antoine-germon/datasets/hands-digits",
+        cache=True
+    )
+    yaml_path = next(Path(dataset_path).rglob("*.yaml"))
+
     model = YOLO(model_type)
-    
     model.train(
-        data="https://platform.ultralytics.com/antoine-germon/datasets/hands-digits",
+        data=str(yaml_path),
         **config
     )
 
