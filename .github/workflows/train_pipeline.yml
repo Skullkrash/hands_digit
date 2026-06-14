@@ -55,6 +55,8 @@ jobs:
       # ==================== ML Pipeline avec VENV local ====================
       - name: pipeline-run
         working-directory: train
+        env:
+          ULTRALYTICS_API_KEY: ${{ secrets.ULTRALYTICS_API_KEY }}
         run: ./.venv_train/Scripts/python.exe pipeline.py
 
       - name: upload-artifacts
