@@ -26,7 +26,7 @@ jobs:
 
     defaults:
       run:
-        shell: bash
+        shell: powershell
 
     env:
       PYTHONUNBUFFERED: "1"  
@@ -58,13 +58,13 @@ jobs:
             python3 -m venv .venv_train
           fi
           
-          ./.venv_train/bin/python -m pip install --upgrade pip
-          ./.venv_train/bin/python -m pip install -r requirements.txt
+          ./.venv_train/Scripts/python.exe -m pip install --upgrade pip
+          ./.venv_train/Scripts/python.exe -m pip install -r requirements.txt
 
       # ==================== ML Pipeline avec VENV local ====================
       - name: pipeline-run
         working-directory: train
-        run: ./.venv_train/bin/python pipeline.py
+        run: ./.venv_train/Scripts/python.exe pipeline.py
 
       - name: upload-artifacts
         if: always()
