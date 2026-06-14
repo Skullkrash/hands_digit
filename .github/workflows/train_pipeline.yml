@@ -42,7 +42,7 @@ jobs:
         # echo "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" > .env
       - name: env-file-setup
         run: |
-          "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}" > .env
+          [System.IO.File]::WriteAllText("${{ github.workspace }}/.env", "ULTRALYTICS_API_KEY=${{ secrets.ULTRALYTICS_API_KEY }}", [System.Text.Encoding]::UTF8)
       
       # ==================== GESTION AUTOMATIQUE DU VENV ====================
       - name: training-venv-setup
